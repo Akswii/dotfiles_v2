@@ -1,0 +1,31 @@
+# Lazygit configuration
+# Location: ~/.config/lazygit/config.yml
+
+customCommands:
+  # Quickly create a worktree from an existing remote branch.
+  # Usage: In the remote branches view, select a branch and press 'w'.
+  # Creates ../branch-name/ with a local tracking branch.
+  - key: "w"
+    context: "remoteBranches"
+    command: >
+      git worktree add
+      ../{{.SelectedRemoteBranch.Name}}
+      -b {{.SelectedRemoteBranch.Name}}
+      origin/{{.SelectedRemoteBranch.Name}}
+    description: "Create worktree from remote branch"
+
+  # Create a worktree with a new branch based off a local branch.
+  # Usage: In the local branches view, select a base branch (e.g. develop)
+  # and press 'W'. You'll be prompted for the new branch name.
+  - key: "W"
+    context: "localBranches"
+    prompts:
+      - type: "input"
+        title: "New branch name"
+        key: "BranchName"
+    command: >
+      git worktree add
+      ../{{.Form.BranchName}}
+      -b {{.Form.BranchName}}
+      {{.SelectedLocalBranch.Name}}
+    description: "Create worktree with new branch from selected branch"
